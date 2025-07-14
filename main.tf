@@ -7,23 +7,21 @@ terraform {
     }
   }
 }
- 
+
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
-access_key = var.access_key
-secret_key = var.secret_key
-}
-resource "aws_instance" "myinstance" {
-  ami           = "ami-020cba7c55df1f615"
-  instance_type = "t2.micro"
-  counts = 2
-  tags = {
-    Name = "myinstance ${count.index+1}"
-    
-}
+  region     = "us-east-1"
+  access_key = var.access_key
+  secret_key = var.secret_key
 }
 
-output "my_ip" {
-   value = aws_instance.myinstance.public_ip
+resource "aws_instance" "myinstance" {
+  count         = 2
+  ami           = "ami-020cba7c55df1f615"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "myinstance ${count.index + 1}"
+  }
 }
+
