@@ -1,0 +1,27 @@
+terraform {
+  required_version = "~> 1.1"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+ 
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_instance" "myinstance" {
+  ami           = "ami-020cba7c55df1f615"
+  instance_type = "t2.micro"
+  counts = 2
+  tags = {
+    Name = "myinstance ${count.index+1}"
+    
+}
+}
+
+output "my_ip" {
+   value = aws_instance.myinstance.public_ip
+}
